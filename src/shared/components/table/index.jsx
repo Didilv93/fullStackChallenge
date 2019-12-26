@@ -4,7 +4,7 @@ import { TableContainer, TableBody, TableCell, TableRow, Table, Paper } from '@m
 
 import TableFooter from './tableFooter';
 
-const CustomPaginationActionsTable = ({ data, hasPagination, card }) => {
+const CustomPaginationActionsTable = ({ data, hasPagination, Card, action, disableActions }) => {
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(6);
@@ -23,7 +23,7 @@ const CustomPaginationActionsTable = ({ data, hasPagination, card }) => {
           ).map(row => (
             <TableRow key={row.id}>
               <TableCell component='th' scope='row' className={classes.tableCell}>
-                {card({ ...row })}
+                <Card {...row} action={action} disableActions={disableActions} />
               </TableCell>
             </TableRow>
           ))}

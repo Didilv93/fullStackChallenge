@@ -218,16 +218,39 @@ const playlist = [
 ];
 
 const UserSuggestion = ({ location }) => {
+  const [dataBase, setDataBase] = React.useState(playlist);
+  const [selectedSongs, setSelectedSongs] = React.useState([]);
+
+  const selectMusic = music => {
+    const newBase = dataBase.filter(item => item.id !== music.id);
+
+    setDataBase([...newBase]);
+    setSelectedSongs([music, ...selectedSongs]);
+  };
+
+  const removeSelectedMusic = music => {
+    const newSelectedSongs = selectedSongs.filter(item => item.id !== music.id);
+
+    setDataBase([music, ...dataBase]);
+    setSelectedSongs([...newSelectedSongs]);
+  };
+
   return (
     <Grid container direction='column' spacing={2}>
       <Header pathName={location.pathname} />
       <Grid item>
         <Grid container direction='row' spacing={3}>
           <Grid xs={6} item>
-            <Table data={playlist} hasPagination card={CardMusic} />
+            <Table
+              data={dataBase}
+              hasPagination
+              Card={CardMusic}
+              action={selectMusic}
+              disableActions={selectedSongs.length >= 5}
+            />
           </Grid>
           <Grid xs={6} item>
-            <Table card={CardMusic} />
+            <Table data={selectedSongs} Card={CardMusic} action={removeSelectedMusic} />
           </Grid>
         </Grid>
       </Grid>
