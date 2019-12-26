@@ -1,9 +1,13 @@
-import { Grid } from '@material-ui/core';
-import React from 'react';
+import { Grid, TextField, IconButton, InputAdornment } from '@material-ui/core';
+import React, { useState, useEffect } from 'react';
+import SearchIcon from '@material-ui/icons/Search';
+import { makeStyles } from '@material-ui/core/styles';
+import _ from 'lodash';
 
 import Header from '../../../../shared/components/header';
 import Table from '../../../../shared/components/table';
 import CardMusic from '../../../../shared/components/cardMusic';
+import { filterByText } from '../../../../shared/util/filters';
 
 const playlist = [
   {
@@ -218,31 +222,63 @@ const playlist = [
 ];
 
 const UserSuggestion = ({ location }) => {
-  const [dataBase, setDataBase] = React.useState(playlist);
-  const [selectedSongs, setSelectedSongs] = React.useState([]);
+  const classes = useStyles();
+
+  const [dataBase, setDataBase] = useState(_.orderBy(playlist, ['name'], ['asc']));
+  const [filter, setFilter] = useState('');
+  const [filteredData, setFilteredData] = useState([]);
+  const [selectedSongs, setSelectedSongs] = useState([]);
+
+  useEffect(() => {
+    const newFilteredData = filterByText(['name', 'artists', 'genre'], dataBase, filter);
+
+    setFilteredData([...newFilteredData]);
+  }, [filter, dataBase]);
 
   const selectMusic = music => {
     const newBase = dataBase.filter(item => item.id !== music.id);
 
     setDataBase([...newBase]);
-    setSelectedSongs([music, ...selectedSongs]);
+    setSelectedSongs([...selectedSongs, music]);
+  };
+
+  const handleChangeFilter = event => {
+    setFilter(event.target.value);
   };
 
   const removeSelectedMusic = music => {
     const newSelectedSongs = selectedSongs.filter(item => item.id !== music.id);
-
-    setDataBase([music, ...dataBase]);
+    const newDataBase = [music, ...dataBase];
+    setDataBase(_.orderBy(newDataBase, ['name'], ['asc']));
     setSelectedSongs([...newSelectedSongs]);
   };
 
   return (
-    <Grid container direction='column' spacing={2}>
+    <Grid container direction='column' spacing={3}>
       <Header pathName={location.pathname} />
+      <Grid item xs={6}>
+        <TextField
+          value={filter}
+          onChange={handleChangeFilter}
+          className={classes.input}
+          variant='outlined'
+          placeholder='Buscar por nome, artista ou gênero da música'
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position='end'>
+                <IconButton aria-label='Search'>
+                  <SearchIcon />
+                </IconButton>
+              </InputAdornment>
+            )
+          }}
+        />
+      </Grid>
       <Grid item>
         <Grid container direction='row' spacing={3}>
           <Grid xs={6} item>
             <Table
-              data={dataBase}
+              data={filteredData}
               hasPagination
               Card={CardMusic}
               action={selectMusic}
@@ -257,5 +293,12 @@ const UserSuggestion = ({ location }) => {
     </Grid>
   );
 };
+
+const useStyles = makeStyles({
+  input: {
+    width: '100%',
+    backgroundColor: '#fff'
+  }
+});
 
 export default UserSuggestion;

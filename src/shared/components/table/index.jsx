@@ -7,7 +7,7 @@ import TableFooter from './tableFooter';
 const CustomPaginationActionsTable = ({ data, hasPagination, Card, action, disableActions }) => {
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(6);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const rows = data ? data.sort((a, b) => (a.calories < b.calories ? -1 : 1)) : [];
 
@@ -29,7 +29,7 @@ const CustomPaginationActionsTable = ({ data, hasPagination, Card, action, disab
           ))}
 
           {emptyRows > 0 && (
-            <TableRow style={{ height: 53 * emptyRows }}>
+            <TableRow style={{ height: 61 * emptyRows }}>
               <TableCell colSpan={6} />
             </TableRow>
           )}

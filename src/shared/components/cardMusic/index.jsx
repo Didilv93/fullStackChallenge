@@ -23,15 +23,15 @@ const CardMusic = music => {
       <Grid item>
         <Grid container direction='column'>
           <Grid item>
-            <Typography>Nome: {name}</Typography>
+            <Typography variant='button'>{name}</Typography>
           </Grid>
           <Grid item>
-            <Typography>Artista: {artists}</Typography>
+            <Typography variant='caption'>Artista: {artists}</Typography>
           </Grid>
         </Grid>
       </Grid>
       <Grid item>
-        <Typography>Gênero: {genre}</Typography>
+        <Typography variant='caption'>Gênero: {genre}</Typography>
       </Grid>
     </Grid>
   );
@@ -39,7 +39,7 @@ const CardMusic = music => {
 
 const useStyles = makeStyles(theme => ({
   container: {
-    padding: theme.spacing(2)
+    padding: theme.spacing(1)
   },
   actionBehavior: {
     cursor: 'pointer',
