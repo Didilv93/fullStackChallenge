@@ -1,4 +1,4 @@
-import { Grid, TextField, IconButton, InputAdornment } from '@material-ui/core';
+import { Grid, TextField, IconButton, InputAdornment, Button } from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
 import SearchIcon from '@material-ui/icons/Search';
 import { makeStyles } from '@material-ui/core/styles';
@@ -286,7 +286,16 @@ const UserSuggestion = ({ location }) => {
             />
           </Grid>
           <Grid xs={6} item>
-            <Table data={selectedSongs} Card={CardMusic} action={removeSelectedMusic} />
+          <Grid container direction='column' spacing={2}>
+            <Grid item>
+              <Table data={selectedSongs} Card={CardMusic} action={removeSelectedMusic} />
+            </Grid>
+            <Grid className={classes.button} item>
+              <Button disabled={selectedSongs.length !== 5} variant="contained" color="primary" disableElevation>
+                Enviar músicas favoritas
+              </Button>
+            </Grid>
+          </Grid>
           </Grid>
         </Grid>
       </Grid>
@@ -298,6 +307,10 @@ const useStyles = makeStyles({
   input: {
     width: '100%',
     backgroundColor: '#fff'
+  },
+  button: {
+    display: 'flex',
+    justifyContent: 'flex-end'
   }
 });
 
