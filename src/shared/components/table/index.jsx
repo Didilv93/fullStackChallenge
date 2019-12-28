@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { TableContainer, TableBody, TableCell, TableRow, Table, Paper } from '@material-ui/core';
 
@@ -6,8 +6,8 @@ import TableFooter from './tableFooter';
 
 const CustomPaginationActionsTable = ({ data, hasPagination, Card, action, disableActions }) => {
   const classes = useStyles();
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const rows = data ? data.sort((a, b) => (a.calories < b.calories ? -1 : 1)) : [];
 
@@ -20,10 +20,10 @@ const CustomPaginationActionsTable = ({ data, hasPagination, Card, action, disab
           {(rowsPerPage > 0
             ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             : rows
-          ).map(row => (
+          ).map((row, index) => (
             <TableRow key={row.id}>
               <TableCell component='th' scope='row' className={classes.tableCell}>
-                <Card {...row} action={action} disableActions={disableActions} />
+                <Card {...row} index={index} action={action} disableActions={disableActions} />
               </TableCell>
             </TableRow>
           ))}

@@ -6,7 +6,7 @@ import _ from 'lodash';
 
 import Header from '../../../../shared/components/header';
 import Table from '../../../../shared/components/table';
-import CardMusic from '../../../../shared/components/cardMusic';
+import { DefaultCard, SelectCard } from '../../../../shared/components/cardMusic';
 import { filterByText } from '../../../../shared/util/filters';
 
 const playlist = [
@@ -280,22 +280,27 @@ const UserSuggestion = ({ location }) => {
             <Table
               data={filteredData}
               hasPagination
-              Card={CardMusic}
+              Card={DefaultCard}
               action={selectMusic}
               disableActions={selectedSongs.length >= 5}
             />
           </Grid>
           <Grid xs={6} item>
-          <Grid container direction='column' spacing={2}>
-            <Grid item>
-              <Table data={selectedSongs} Card={CardMusic} action={removeSelectedMusic} />
+            <Grid container direction='column' spacing={2}>
+              <Grid item>
+                <Table data={selectedSongs} Card={SelectCard} action={removeSelectedMusic} />
+              </Grid>
+              <Grid className={classes.button} item>
+                <Button
+                  disabled={selectedSongs.length !== 5}
+                  variant='contained'
+                  color='primary'
+                  disableElevation
+                >
+                  Enviar músicas favoritas
+                </Button>
+              </Grid>
             </Grid>
-            <Grid className={classes.button} item>
-              <Button disabled={selectedSongs.length !== 5} variant="contained" color="primary" disableElevation>
-                Enviar músicas favoritas
-              </Button>
-            </Grid>
-          </Grid>
           </Grid>
         </Grid>
       </Grid>

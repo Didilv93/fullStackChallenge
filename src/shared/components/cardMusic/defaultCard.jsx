@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Typography } from '@material-ui/core';
 
-const CardMusic = music => {
+const DefaultCard = music => {
   const classes = useStyles();
 
   const { name, artists, genre, action, disableActions } = music;
@@ -39,7 +39,8 @@ const CardMusic = music => {
 
 const useStyles = makeStyles(theme => ({
   container: {
-    padding: theme.spacing(1)
+    padding: theme.spacing(1),
+    minHeight: '60px'
   },
   actionBehavior: {
     cursor: 'pointer',
@@ -52,4 +53,4 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default CardMusic;
+export default DefaultCard;
