@@ -17,7 +17,7 @@ const Footer = ({ setRowsPerPage, setPage, rows, rowsPerPage, page }) => {
     <TableFooter>
       <TableRow>
         <TablePagination
-          rowsPerPageOptions={[6, 15, 30, 50]}
+          rowsPerPageOptions={[5, 15, 30, 50]}
           colSpan={3}
           count={rows.length}
           rowsPerPage={rowsPerPage}

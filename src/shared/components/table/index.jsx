@@ -8,7 +8,6 @@ const CustomPaginationActionsTable = ({ data, hasPagination, Card, action, disab
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
   const rows = data ? data.sort((a, b) => (a.calories < b.calories ? -1 : 1)) : [];
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
@@ -30,7 +29,7 @@ const CustomPaginationActionsTable = ({ data, hasPagination, Card, action, disab
 
           {emptyRows > 0 && (
             <TableRow style={{ height: 61 * emptyRows }}>
-              <TableCell colSpan={6} />
+              <TableCell colSpan={5} />
             </TableRow>
           )}
         </TableBody>
