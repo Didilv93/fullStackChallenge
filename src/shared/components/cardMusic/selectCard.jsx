@@ -28,7 +28,7 @@ const SelectCard = music => {
             <StarBorderIcon color='primary' />
           </Grid>
           <Grid item>
-            <Typography variant='button'>{`${index + 1}º ${name}`}</Typography>
+            <Typography variant='button'>{`${index + 1}º - ${name}`}</Typography>
           </Grid>
         </Grid>
       </Grid>
