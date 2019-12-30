@@ -19,10 +19,10 @@ const CustomPaginationActionsTable = ({ data, hasPagination, Card, action, disab
           {(rowsPerPage > 0
             ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             : rows
-          ).map(row => (
+          ).map((row, index) => (
             <TableRow key={row.id}>
               <TableCell component='th' scope='row' className={classes.tableCell}>
-                <Card {...row} action={action} disableActions={disableActions} />
+                <Card {...row} index={index} action={action} disableActions={disableActions} />
               </TableCell>
             </TableRow>
           ))}

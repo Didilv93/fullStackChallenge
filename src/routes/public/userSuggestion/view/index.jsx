@@ -102,7 +102,6 @@ const UserSuggestion = ({ location }) => {
           selectedSongs={selectedSongs}
           loadingButton={loadingButton}
           selectMusic={selectMusic}
-          dataBase={dataBase}
           data={filteredData}
           filter={filter}
         />

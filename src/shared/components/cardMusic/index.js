@@ -1,3 +1,5 @@
 import DefaultCard from './defaultCard';
 import SelectCard from './selectCard';
-export { DefaultCard, SelectCard };
+import FinalRankingCard from './finalRankingCard';
+import NicknamesCard from './nicknamesCard';
+export { DefaultCard, SelectCard, FinalRankingCard, NicknamesCard };
