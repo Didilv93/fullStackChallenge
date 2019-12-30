@@ -1,21 +1,25 @@
-import { Grid } from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
+import { Redirect } from 'react-router-dom';
+import { Grid } from '@material-ui/core';
 import _ from 'lodash';
 
 import Header from '../../../../shared/components/header';
 import { filterByText } from '../../../../shared/utils/filters';
 import UserSuggestionManager from '../userSuggestionManager';
+import Dialog from '../../../../shared/components/dialog';
 import Suggestion from './suggestion';
 import UserAccess from './userAccess';
 
 const UserSuggestion = ({ location }) => {
-  const [filter, setFilter] = useState('');
-  const [loadingButton, setLoadingButton] = useState(false);
   const [userDates, setUserDates] = useState({ nickname: '', favoriteSongs: [] });
-  const [dataBase, setDataBase] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
-  const [selectedSongs, setSelectedSongs] = useState([]);
+  const [loadingButton, setLoadingButton] = useState(false);
   const [userVotedSongs, setUserVotedSongs] = useState([]);
+  const [selectedSongs, setSelectedSongs] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [redirectTo, setRedirectTo] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [dataBase, setDataBase] = useState([]);
+  const [filter, setFilter] = useState('');
 
   const nonVotingUser =
     userDates.nickname && (!userDates.favoriteSongs || userDates.favoriteSongs.length === 0);
@@ -72,6 +76,12 @@ const UserSuggestion = ({ location }) => {
       );
       setLoadingButton(false);
     }
+    setOpenDialog(true);
+  };
+
+  const onCloseModal = () => {
+    setOpenDialog(false);
+    setRedirectTo(true);
   };
 
   return (
@@ -97,6 +107,14 @@ const UserSuggestion = ({ location }) => {
           filter={filter}
         />
       )}
+      <Dialog
+        text='Recebemos suas indicações com sucesso!'
+        handleClose={onCloseModal}
+        onClick={onCloseModal}
+        textButton='Voltar'
+        open={openDialog}
+      />
+      {redirectTo && <Redirect to='/' />}
     </Grid>
   );
 };

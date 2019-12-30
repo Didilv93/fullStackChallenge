@@ -14,7 +14,6 @@ const Suggestion = ({
   selectedSongs,
   loadingButton,
   selectMusic,
-  dataBase,
   filter,
   data
 }) => {

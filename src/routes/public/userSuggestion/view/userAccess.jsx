@@ -46,7 +46,7 @@ const UserAccess = ({ verifyNickname, loading, selectedSongs, nicknameRegistered
                 <Grid item>
                   <Typography variant='subtitle1'>{`${_.capitalize(
                     nicknameRegistered
-                  )}, já recenemos suas indicações de músicas, como segue abaixo. Agora é só acompanhar nossa programação na rádio!`}</Typography>
+                  )}, já recebemos suas indicações de músicas, como segue abaixo. Agora é só acompanhar nossa programação na rádio!`}</Typography>
                 </Grid>
                 <Grid item>
                   <Table data={selectedSongs} Card={SelectCard} />
