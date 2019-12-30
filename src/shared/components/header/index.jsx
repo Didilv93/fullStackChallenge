@@ -7,7 +7,7 @@ const Headler = props => {
   const title = selectTitle(props.pathName);
   return (
     <Grid item>
-      <Typography variant='h4'>{title}</Typography>
+      <Typography variant='h5'>{title}</Typography>
     </Grid>
   );
 };

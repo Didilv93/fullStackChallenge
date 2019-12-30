@@ -6,7 +6,7 @@ import StarBorderIcon from '@material-ui/icons/StarBorder';
 const SelectCard = music => {
   const classes = useStyles();
 
-  const { name, artists, index, action, disableActions } = music;
+  const { name, artists, rankingValue, action, disableActions } = music;
 
   const arrClassNameContainer = [classes.container];
   if (action) {
@@ -15,12 +15,12 @@ const SelectCard = music => {
 
   return (
     <Grid
+      onClick={action && !disableActions ? () => action(music) : undefined}
       className={arrClassNameContainer.join(' ')}
-      container
-      direction='row'
       justify='space-between'
       alignItems='center'
-      onClick={action && !disableActions ? () => action(music) : undefined}
+      direction='row'
+      container
     >
       <Grid item>
         <Grid container direction='row' alignItems='center' spacing={1}>
@@ -28,7 +28,7 @@ const SelectCard = music => {
             <StarBorderIcon color='primary' />
           </Grid>
           <Grid item>
-            <Typography variant='button'>{`${index + 1}º - ${name}`}</Typography>
+            <Typography variant='button'>{`${rankingValue}º - ${name}`}</Typography>
           </Grid>
         </Grid>
       </Grid>

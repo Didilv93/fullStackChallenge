@@ -1,31 +1,24 @@
-import { Grid, TextField, IconButton, InputAdornment, Button } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
-import SearchIcon from '@material-ui/icons/Search';
-import { makeStyles } from '@material-ui/core/styles';
 import _ from 'lodash';
 
 import Header from '../../../../shared/components/header';
-import Table from '../../../../shared/components/table';
-import { DefaultCard, SelectCard } from '../../../../shared/components/cardMusic';
 import { filterByText } from '../../../../shared/utils/filters';
 import UserSuggestionManager from '../userSuggestionManager';
+import Suggestion from './suggestion';
+import UserAccess from './userAccess';
 
 const UserSuggestion = ({ location }) => {
-  const classes = useStyles();
-
-  const [dataBase, setDataBase] = useState([]);
   const [filter, setFilter] = useState('');
+  const [loadingButton, setLoadingButton] = useState(false);
+  const [userDates, setUserDates] = useState({ nickname: '', favoriteSongs: [] });
+  const [dataBase, setDataBase] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [selectedSongs, setSelectedSongs] = useState([]);
+  const [userVotedSongs, setUserVotedSongs] = useState([]);
 
-  useEffect(() => {
-    async function listSongs() {
-      const { playlist } = await UserSuggestionManager.listSongs();
-      setDataBase(_.orderBy(playlist, ['name'], ['asc']));
-    }
-
-    listSongs();
-  }, []);
+  const nonVotingUser =
+    userDates.nickname && (!userDates.favoriteSongs || userDates.favoriteSongs.length === 0);
 
   useEffect(() => {
     const newFilteredData = filterByText(['name', 'artists', 'genre'], dataBase, filter);
@@ -33,11 +26,10 @@ const UserSuggestion = ({ location }) => {
     setFilteredData([...newFilteredData]);
   }, [filter, dataBase]);
 
-  const selectMusic = music => {
+  const selectMusic = (music, index) => {
     const newBase = dataBase.filter(item => item.id !== music.id);
-
     setDataBase([...newBase]);
-    setSelectedSongs([...selectedSongs, music]);
+    setSelectedSongs([...selectedSongs, { ...music, rankingValue: selectedSongs.length + 1 }]);
   };
 
   const handleChangeFilter = event => {
@@ -51,70 +43,62 @@ const UserSuggestion = ({ location }) => {
     setSelectedSongs([...newSelectedSongs]);
   };
 
+  const verifyNickname = async nickname => {
+    setLoadingButton(true);
+    const { user } = await UserSuggestionManager.getUser(nickname);
+    if (user) {
+      setUserDates({ nickname: user.nickname, favoriteSongs: user.favoriteSongs || [] });
+    }
+    const { playlist } = await UserSuggestionManager.listSongs();
+    const newDataBase = _.orderBy(playlist, ['name'], ['asc']);
+    setDataBase([...newDataBase]);
+    if (user.favoriteSongs && user.favoriteSongs.length > 0) {
+      setUserVotedSongs(
+        user.favoriteSongs.map(song => ({
+          ...newDataBase.find(item => item.id === song.id),
+          rankingValue: song.rankingValue
+        }))
+      );
+    }
+    setLoadingButton(false);
+  };
+
+  const registerUserVote = async favoriteSongs => {
+    if (favoriteSongs && userDates.nickname && nonVotingUser) {
+      setLoadingButton(true);
+      await UserSuggestionManager.registerUserVote(
+        userDates.nickname,
+        favoriteSongs.map(item => ({ id: item.id, rankingValue: item.rankingValue }))
+      );
+      setLoadingButton(false);
+    }
+  };
+
   return (
-    <Grid container direction='column' spacing={3}>
+    <Grid container direction='column' spacing={2}>
       <Header pathName={location.pathname} />
-      <Grid item xs={6}>
-        <TextField
-          value={filter}
-          onChange={handleChangeFilter}
-          className={classes.input}
-          variant='outlined'
-          placeholder='Buscar por nome, artista ou gênero da música'
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position='end'>
-                <IconButton aria-label='Search'>
-                  <SearchIcon />
-                </IconButton>
-              </InputAdornment>
-            )
-          }}
+      {!nonVotingUser ? (
+        <UserAccess
+          nicknameRegistered={userDates.nickname}
+          verifyNickname={verifyNickname}
+          selectedSongs={userVotedSongs}
+          loading={loadingButton}
         />
-      </Grid>
-      <Grid item>
-        <Grid container direction='row' spacing={3}>
-          <Grid xs={6} item>
-            <Table
-              data={filteredData}
-              hasPagination
-              Card={DefaultCard}
-              action={selectMusic}
-              disableActions={selectedSongs.length >= 5}
-            />
-          </Grid>
-          <Grid xs={6} item>
-            <Grid container direction='column' spacing={2}>
-              <Grid item>
-                <Table data={selectedSongs} Card={SelectCard} action={removeSelectedMusic} />
-              </Grid>
-              <Grid className={classes.button} item>
-                <Button
-                  disabled={selectedSongs.length !== 5}
-                  variant='contained'
-                  color='primary'
-                  disableElevation
-                >
-                  Enviar músicas favoritas
-                </Button>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
+      ) : (
+        <Suggestion
+          removeSelectedMusic={removeSelectedMusic}
+          handleChangeFilter={handleChangeFilter}
+          registerUserVote={registerUserVote}
+          selectedSongs={selectedSongs}
+          loadingButton={loadingButton}
+          selectMusic={selectMusic}
+          dataBase={dataBase}
+          data={filteredData}
+          filter={filter}
+        />
+      )}
     </Grid>
   );
 };
-
-const useStyles = makeStyles({
-  input: {
-    width: '100%',
-    backgroundColor: '#fff'
-  },
-  button: {
-    display: 'flex',
-    justifyContent: 'flex-end'
-  }
-});
 
 export default UserSuggestion;

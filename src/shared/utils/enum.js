@@ -1,6 +1,6 @@
 const titlesByRoute = {
-  admin: 'Resultado Top 5',
-  sugestoes: 'Sugestões Top 5'
+  admin: 'Classificação final',
+  sugestoes: 'Sugestão 5 músicas favoritas'
 };
 
 export function selectTitle(pathName) {
