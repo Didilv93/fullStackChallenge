@@ -10,5 +10,25 @@
   {
     "text": "Docker",
     "url": "https://www.docker.com/"
+  },
+  {
+    "text": "MaterialUI",
+    "url": "https://material-ui.com/"
+  },
+  {
+    "text": "Stackoverflow",
+    "url": "https://stackoverflow.com/"
+  },
+  {
+    "text": "Github",
+    "url": "https://github.com/"
+  },
+  {
+    "text": "NpmJS",
+    "url": "https://www.npmjs.com/"
+  },
+  {
+    "text": "Youtube",
+    "url": "https://www.youtube.com/watch?v=AVNADGzXrrQ"
   }
 ]
